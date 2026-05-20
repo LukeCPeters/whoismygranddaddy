@@ -1,0 +1,32 @@
+@model TreeViewModel
+@if (Model.Notice is not null)
+{
+    <p class="empty">@Model.Notice</p>
+}
+else if (Model.Root is null)
+{
+    <p class="empty">No person found with identity number "@Model.IdentityNumber".</p>
+}
+else
+{
+    <div class="tree" data-identity="@Model.IdentityNumber">
+        <ul>
+            <partial name="_Node" model="Model.Root" />
+        </ul>
+    </div>
+    @if (Model.HasMore)
+    {
+        <button class="more"
+                hx-get="@Url.Action("Search", "Tree", new { identityNumber = Model.IdentityNumber, depth = Model.NextDepth })"
+                hx-target="#tree-result"
+                hx-swap="innerHTML">
+            More…
+        </button>
+    }
+    <div class="tree-zoom" hidden>
+        <button type="button" class="zoom-out" aria-label="Zoom out">&minus;</button>
+        <output class="zoom-level">100%</output>
+        <button type="button" class="zoom-in" aria-label="Zoom in">+</button>
+        <button type="button" class="zoom-fit">Fit</button>
+    </div>
+}

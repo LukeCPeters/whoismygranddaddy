@@ -1,0 +1,42 @@
+@model AncestorViewModel
+@functions {
+    static string Born(Person p) => p.BirthDate?.ToString("yyyy-MM-dd") ?? "unknown";
+}
+@if (Model.Notice is not null)
+{
+    <p class="empty">@Model.Notice</p>
+}
+else if (Model.Start is null || Model.Root is null)
+{
+    <p class="empty">No person found with that identity number.</p>
+}
+else
+{
+    <div class="lineage">
+        <div class="person-card">
+            <p class="eyebrow">Searched person</p>
+            <h2>@Model.Start.FullName</h2>
+            <dl class="details">
+                <div><dt>Born</dt><dd>@Born(Model.Start)</dd></div>
+                <div><dt>ID number</dt><dd>@Model.Start.IdentityNumber</dd></div>
+            </dl>
+        </div>
+
+        @if (Model.Root.Id == Model.Start.Id)
+        {
+            <p class="note">This person has no recorded ancestors.</p>
+        }
+        else
+        {
+            <div class="lineage-arrow" aria-hidden="true">↓</div>
+            <div class="person-card root">
+                <p class="eyebrow">Root ascendant</p>
+                <h2>@Model.Root.FullName</h2>
+                <dl class="details">
+                    <div><dt>Born</dt><dd>@Born(Model.Root)</dd></div>
+                    <div><dt>ID number</dt><dd>@Model.Root.IdentityNumber</dd></div>
+                </dl>
+            </div>
+        }
+    </div>
+}

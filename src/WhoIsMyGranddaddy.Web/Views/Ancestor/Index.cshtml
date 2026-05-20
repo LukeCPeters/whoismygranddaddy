@@ -1,0 +1,24 @@
+@{
+    ViewData["Title"] = "Root Ascendant";
+    var examples = new[]
+    {
+        new ExampleId("2807220002089", "Maria Vermeulen — female with an ascendant"),
+        new ExampleId("7101015031080", "Xander Oudtshoorn — male with a distant (24-generation) ascendant"),
+        new ExampleId("0001015000084", "Johannes Vermeulen — male with no ascendant"),
+    };
+}
+<section class="page-head">
+    <p class="eyebrow">Trace upward</p>
+    <h1>Root Ascendant</h1>
+    <p class="lead">Enter a South African ID number to find the oldest ancestor in that person's lineage.</p>
+</section>
+
+<form class="search" hx-get="@Url.Action("Search", "Ancestor")" hx-target="#ancestor-result" hx-swap="innerHTML">
+    <input type="text" name="identityNumber" placeholder="e.g. 0005205005084"
+           inputmode="numeric" maxlength="13" autocomplete="off" autofocus required />
+    <button type="submit">Search</button>
+</form>
+
+<partial name="_Examples" model="examples" />
+
+<div id="ancestor-result" class="result"></div>

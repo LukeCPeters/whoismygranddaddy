@@ -1,0 +1,25 @@
+@{
+    ViewData["Title"] = "Family Tree Viewer";
+    var examples = new[]
+    {
+        new ExampleId("0001015000084", "Johannes Vermeulen — 5-generation family tree"),
+        new ExampleId("5001015008082", "Adam Oudtshoorn — 24 generations (press “More…” twice)"),
+        new ExampleId("2503105001086", "Pieter Vermeulen — a mid-tree branch"),
+    };
+}
+<section class="page-head">
+    <p class="eyebrow">View descendants</p>
+    <h1>Family Tree Viewer</h1>
+    <p class="lead">Enter a South African ID number to list every descendant.</p>
+</section>
+
+<form class="search" hx-get="@Url.Action("Search", "Tree")" hx-target="#tree-result" hx-swap="innerHTML">
+    <input type="text" name="identityNumber" placeholder="e.g. 0001015000084"
+           inputmode="numeric" maxlength="13" autocomplete="off" autofocus required />
+    <input type="hidden" name="depth" value="10" />
+    <button type="submit">Search</button>
+</form>
+
+<partial name="_Examples" model="examples" />
+
+<div id="tree-result" class="result"></div>

@@ -1,0 +1,65 @@
+@model PersonNode
+@functions {
+    static string Line(Person p) => $"{(p.BirthDate?.ToString("yyyy-MM-dd") ?? "—")} · {p.IdentityNumber}";
+}
+@{
+    var branches = Model.Children.Where(c => c.Children.Count > 0).ToList();
+    var leaves = Model.Children.Where(c => c.Children.Count == 0).ToList();
+    var stackLeaves = branches.Count > 0 && leaves.Count > 0;
+}
+<li class="@(Model.Children.Count > 0 ? "has-kids" : null)">
+    <div class="parents">
+        <span class="person">
+            <strong>@Model.Person.FullName</strong>
+            <span class="meta">@Line(Model.Person)</span>
+        </span>
+        @foreach (var partner in Model.Partners)
+        {
+            <span class="spouse-link" aria-hidden="true"></span>
+            <span class="person spouse">
+                <strong>@partner.FullName</strong>
+                <span class="meta">@Line(partner)</span>
+            </span>
+        }
+    </div>
+    @if (Model.Children.Count > 0)
+    {
+        <ul>
+            @if (stackLeaves)
+            {
+                foreach (var child in branches)
+                {
+                    <partial name="_Node" model="child" />
+                }
+                <li class="leaves">
+                    @foreach (var leaf in leaves)
+                    {
+                        <div class="leaf">
+                            <div class="parents">
+                                <span class="person">
+                                    <strong>@leaf.Person.FullName</strong>
+                                    <span class="meta">@Line(leaf.Person)</span>
+                                </span>
+                                @foreach (var partner in leaf.Partners)
+                                {
+                                    <span class="spouse-link" aria-hidden="true"></span>
+                                    <span class="person spouse">
+                                        <strong>@partner.FullName</strong>
+                                        <span class="meta">@Line(partner)</span>
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                    }
+                </li>
+            }
+            else
+            {
+                foreach (var child in Model.Children)
+                {
+                    <partial name="_Node" model="child" />
+                }
+            }
+        </ul>
+    }
+</li>

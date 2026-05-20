@@ -1,0 +1,14 @@
+@model IReadOnlyList<ExampleId>
+<section class="examples">
+    <p class="eyebrow">Example IDs</p>
+    <ul class="example-list">
+        @foreach (var example in Model)
+        {
+            <li class="example">
+                <span class="id">@example.Id</span>
+                <span class="desc">@example.Description</span>
+                <button type="button" class="copy-id" data-id="@example.Id">Copy ID</button>
+            </li>
+        }
+    </ul>
+</section>
